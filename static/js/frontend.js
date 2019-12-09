@@ -7,27 +7,23 @@ $(document).ready(function(){
     $(".form-signin").on('submit', function(){
 
         /* get ID and check if valid */
-        const userID = $("#userID").val();
+        const uID = $("#userID").val();
+
+        $.post("/validate", {
+            userID: uID
+        });
         
     })
 
     $(".sign-up").on('click', function(){
-        $(".card-body-signin").hide();
-        $(".card-body-signup").show();
+        $(".card-body-signin").hide(300);
+        $(".card-body-signup").show(300);
     })
 
     $(".sign-in").on('click', function(){
-        $(".card-body-signup").hide();
-        $(".card-body-signin").show();
+        $(".card-body-signup").hide(300);
+        $(".card-body-signin").show(300);
     })
-
-
-
-
-
-
-
-
 
 
 
