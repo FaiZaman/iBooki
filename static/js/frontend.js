@@ -11,8 +11,15 @@ $(document).ready(function(){
         
     })
 
+    $(".sign-up").on('click', function(){
+        $(".card-body-signin").hide();
+        $(".card-body-signup").show();
+    })
 
-
+    $(".sign-in").on('click', function(){
+        $(".card-body-signup").hide();
+        $(".card-body-signin").show();
+    })
 
 
 
