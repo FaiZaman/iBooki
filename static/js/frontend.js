@@ -15,6 +15,17 @@ $(document).ready(function(){
         
     })
 
+    $(".form-signup").on('submit', function(){
+
+        /* get ID and add to users database */
+        const uID = $("#new-user-id").val();
+        console.log(uID)
+        $.post("/addNewUser", {
+            userID: uID
+        });
+
+    });
+
     $(".sign-up").on('click', function(){
         $(".card-body-signin").hide(300);
         $(".card-body-signup").show(300);
