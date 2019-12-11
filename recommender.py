@@ -3,7 +3,8 @@ import numpy as np
 from scipy.sparse.linalg import svds
 
 def read_and_predict():
-# read in dataframes
+
+    # read in dataframes
     books = pd.read_csv("dataset/books.csv")
     ratings = pd.read_csv("dataset/ratings.csv")
 

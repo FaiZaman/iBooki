@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, url_for, render_template, request, redirect, Response
 import pandas as pd
 
 app = Flask(__name__)
@@ -12,14 +12,18 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
+
 @app.route("/validate", methods = ['POST'])
 def validate():
 
     userID = request.form['userID']
-    print(userID)
     for index, row in users.iterrows():
-        if userID == row['userID']:
-            return userID
+        if int(userID) == int(row['userID']):
+            return redirect(url_for("profile", id=userID))
     return "No"
 
 
@@ -28,7 +32,6 @@ def addNewUser():
 
     userID = request.form['userID']
     users.append(userID)
-    print(users)
     return users
 
 

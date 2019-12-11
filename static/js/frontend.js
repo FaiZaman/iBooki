@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     $(".card-body-signup").hide();
     
-    $(".form-signin").on('submit', function(){
+    $("#sign-in-button").on('click', function(e){
 
         /* get ID and check if valid */
         const uID = $("#userID").val();
@@ -19,7 +19,6 @@ $(document).ready(function(){
 
         /* get ID and add to users database */
         const uID = $("#new-user-id").val();
-        console.log(uID)
         $.post("/addNewUser", {
             userID: uID
         });
@@ -35,7 +34,5 @@ $(document).ready(function(){
         $(".card-body-signup").hide(300);
         $(".card-body-signin").show(300);
     })
-
-
 
 });
