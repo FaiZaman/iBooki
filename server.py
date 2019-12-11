@@ -11,7 +11,11 @@ def home():
 
 @app.route("/profile/<userID>")
 def profile(userID):
-    return render_template("profile.html", id=userID)
+
+    user_ratings = get_user_ratings(int(userID))
+    print(user_ratings)
+
+    return render_template("profile.html", id=userID, ratings=user_ratings.to_html())
 
 
 @app.route("/validate", methods = ['POST'])
@@ -45,6 +49,14 @@ def addNewUser():
     users = users.append({'userID': userID}, ignore_index=True)
     users_csv = users.to_csv(r'dataset/users.csv', index=False)
     return "works", 200
+
+
+def get_user_ratings(userID):
+
+    ratings = pd.read_csv("dataset/ratings.csv")
+    user_ratings = ratings.loc[ratings['userID'] == userID]
+    return user_ratings
+
 
 if __name__ == "__main__":
     app.run()
