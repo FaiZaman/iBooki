@@ -5,5 +5,16 @@ iBooki | My Profile
 {% endblock %}
 
 {% block content %}
-<h1>Welcome, user {{ id }}</h1>
+<div class="row">
+    <div class="col-md-6 offset-md-4">
+        <h1 class="welcome">Welcome, User {{ id }}</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 offset-md-1 recommendations">
+        <b>Your recommendations</b>
+    </div>
+</div>
 {% endblock %}
+

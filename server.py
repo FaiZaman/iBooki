@@ -20,19 +20,29 @@ def validate():
 
     # validates if user ID is actual user
     userID = request.form['userID']
+    print(users)
+    
     for index, row in users.iterrows():
+        print(userID, row['userID'])
         if int(userID) == int(row['userID']):
-            return make_response("200")
-    return make_response("400")
+            return "works", 200
+    return "oops", 400
 
 
-@app.route("/userID", methods = ['POST'])
+@app.route("/addNewUser", methods = ['POST'])
 def addNewUser():
 
     userID = request.form['userID']
-    users.append(userID)
-    return users
 
+    exists = False
+    for index, row in users.iterrows():
+        if int(userID) == int(row['userID']):
+            exists = True
+            break
+
+    if exists:
+        return "oops", 400
+    return "works", 200
 
 if __name__ == "__main__":
     app.run()
