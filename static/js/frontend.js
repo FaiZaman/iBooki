@@ -4,25 +4,32 @@ $(document).ready(function(){
 
     $(".card-body-signup").hide();
     
-    $("#sign-in-button").on('click', function(e){
+    $("#sign-in-button").on('click', function(){
 
         /* get ID and check if valid */
-        const uID = $("#userID").val();
+        const userID = $("#userID").val();
 
-        $.post("/validate", {
-            userID: uID
+        $.ajax({
+            url: "/validate",
+            data: {
+                userID: userID,
+            },
+            type: 'POST',
+            success: function(response){
+                window.location.href = "/profile/" + userID
+            },
         });
         
     })
 
     $(".form-signup").on('submit', function(){
 
-        /* get ID and add to users database */
+        /* get ID and add to users database 
         const uID = $("#new-user-id").val();
         $.post("/addNewUser", {
             userID: uID
         });
-
+*/
     });
 
     $(".sign-up").on('click', function(){
