@@ -3,7 +3,6 @@ import pandas as pd
 
 # create app and read in users
 app = Flask(__name__)
-users = pd.read_csv("dataset/users.csv")
 
 @app.route("/")
 def home():
@@ -19,11 +18,10 @@ def profile(userID):
 def validate():
 
     # validates if user ID is actual user
+    users = pd.read_csv("dataset/users.csv")
     userID = request.form['userID']
-    print(users)
     
     for index, row in users.iterrows():
-        print(userID, row['userID'])
         if int(userID) == int(row['userID']):
             return "works", 200
     return "oops", 400
@@ -32,6 +30,7 @@ def validate():
 @app.route("/addNewUser", methods = ['POST'])
 def addNewUser():
 
+    users = pd.read_csv("dataset/users.csv")
     userID = request.form['userID']
 
     exists = False
@@ -39,9 +38,12 @@ def addNewUser():
         if int(userID) == int(row['userID']):
             exists = True
             break
-
     if exists:
         return "oops", 400
+    
+    # if ID does not exist append to DF and csv
+    users = users.append({'userID': userID}, ignore_index=True)
+    users_csv = users.to_csv(r'dataset/users.csv', index=False)
     return "works", 200
 
 if __name__ == "__main__":

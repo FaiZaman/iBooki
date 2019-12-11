@@ -4,8 +4,10 @@ $(document).ready(function(){
 
     $(".card-body-signup").hide();
     
-    $("#sign-in-button").on('click', function(e){
+    $(".form-signin").on('submit', function(event){
 
+        event.preventDefault();
+        
         /* get ID and check if valid */
         const userID = $("#userID").val();
 
