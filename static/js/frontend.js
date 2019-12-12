@@ -4,26 +4,46 @@ $(document).ready(function(){
 
     $(".card-body-signup").hide();
     
-    $(".form-signin").on('submit', function(){
+    $(".form-signin").on('submit', function(event){
 
-        /* get ID and check if valid */
-        const uID = $("#userID").val();
-
-        $.post("/validate", {
-            userID: uID
-        });
+        event.preventDefault();
         
+        /* get ID and check if valid */
+        const userID = $("#userID").val();
+
+        $.ajax({
+            url: "/validate",
+            data: {
+                userID: userID,
+            },
+            type: 'POST',
+            success: function(){
+                window.location.href = "/ratings/" + userID
+            },
+            error: function(){
+                alert("User ID is invalid. Please try again.")
+            }
+        });
     })
 
-    $(".form-signup").on('submit', function(){
+    $(".form-signup").on('submit', function(e){
 
         /* get ID and add to users database */
-        const uID = $("#new-user-id").val();
-        console.log(uID)
-        $.post("/addNewUser", {
-            userID: uID
-        });
-
+        const userID = $("#new-user-id").val();
+        e.preventDefault();
+        $.ajax({
+            url: "/addNewUser",
+            data: {
+                userID: userID
+            },
+            type: 'POST',
+            success: function(){
+                window.location.href = "/ratings/" + userID
+            },
+            error: function(){
+                alert("This ID already exists. Please choose a different ID.")
+            }
+        })
     });
 
     $(".sign-up").on('click', function(){
@@ -36,6 +56,9 @@ $(document).ready(function(){
         $(".card-body-signin").show(300);
     })
 
-
+    $("#logout").on('click', function(){
+        /* log out and send to home page */
+        window.location.href = "/"
+    })
 
 });

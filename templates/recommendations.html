@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+iBooki | Recommendations
+{% endblock %}
+
+
+{% block nav %}
+<li class="nav-item">
+    <a class="nav-link" href="/ratings/{{ id }}">My Ratings</a>
+</li>
+<li class="nav-item active">
+    <a class="nav-link" href="#">Recommendations<span class="sr-only">(current)</span></a>
+</li>
+{% endblock %}
+
+{% block logout %}
+<ul class="navbar-nav">
+    <li class="nav-item">
+        <button type="button" id="logout" class="nav-link btn btn-info" href="/" style="color:white;"><b>Log Out</b></button>
+    </li>
+</ul>
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 offset-md-3">
+            <h1 class="welcome">Welcome, User {{ id }}</h1>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6 table-header">
+            <b>Your Recommendations</b>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-9 offset-md-3">
+            {{ recommendations | safe }}
+        </div>
+    </div>
+</div>
+{% endblock %}
