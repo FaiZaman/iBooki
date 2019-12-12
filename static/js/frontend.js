@@ -18,7 +18,7 @@ $(document).ready(function(){
             },
             type: 'POST',
             success: function(){
-                window.location.href = "/profile/" + userID
+                window.location.href = "/ratings/" + userID
             },
             error: function(){
                 alert("User ID is invalid. Please try again.")
@@ -38,7 +38,7 @@ $(document).ready(function(){
             },
             type: 'POST',
             success: function(){
-                window.location.href = "/profile/" + userID
+                window.location.href = "/ratings/" + userID
             },
             error: function(){
                 alert("This ID already exists. Please choose a different ID.")

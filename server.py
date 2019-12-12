@@ -1,5 +1,6 @@
 from flask import Flask, url_for, render_template, request, redirect, make_response
 import pandas as pd
+import recommender
 
 # create app and read in users
 app = Flask(__name__)
@@ -9,13 +10,19 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/profile/<userID>")
-def profile(userID):
+@app.route("/ratings/<userID>")
+def ratings(userID):
 
     user_ratings = get_user_ratings(int(userID))
-    print(user_ratings)
+    return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False))
 
-    return render_template("profile.html", id=userID, ratings=user_ratings.to_html())
+
+@app.route("/recommendations/<userID>")
+def recommendations(userID):
+
+    predictions, books, ratings = recommender.read_and_predict()
+    user_data, user_recommendations = recommender.recommend_books(predictions, int(userID), books, ratings, num_recommendations=5)
+    return render_template("recommendations.html", id=userID, recommendations=user_recommendations.to_html(index=False))
 
 
 @app.route("/validate", methods = ['POST'])
@@ -53,8 +60,18 @@ def addNewUser():
 
 def get_user_ratings(userID):
 
+    # read in ratings and take only the ones rated by current user
     ratings = pd.read_csv("dataset/ratings.csv")
     user_ratings = ratings.loc[ratings['userID'] == userID]
+
+    # remove user ID column and sory by book ID
+    user_ratings = user_ratings.drop(['userID'], axis=1)
+    user_ratings = user_ratings.sort_values(by=['bookID'])
+
+    # Add book title and genre
+    books = pd.read_csv("dataset/books.csv")
+    user_ratings = (user_ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
+
     return user_ratings
 
 
