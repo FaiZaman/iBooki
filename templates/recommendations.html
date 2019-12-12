@@ -10,7 +10,7 @@ iBooki | Recommendations
     <a class="nav-link" href="/">Home</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="/ratings.html">My Ratings</a>
+    <a class="nav-link" href="/ratings/{{ id }}">My Ratings</a>
 </li>
 <li class="nav-item active">
     <a class="nav-link" href="#">My Recommendations<span class="sr-only">(current)</span></a>
@@ -19,23 +19,23 @@ iBooki | Recommendations
 
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6 offset-md-4">
-        <h1 class="welcome">Welcome, User {{ id }}</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 offset-md-3">
+            <h1 class="welcome">Welcome, User {{ id }}</h1>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6 table-header">
+            <b>Your Recommendations</b>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-9 offset-md-3">
+            {{ recommendations | safe }}
+        </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-md-6 offset-md-1 recommendations">
-        <b>Your Recommendations</b>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 offset-md-4">
-        {{ recommendations | safe }}
-    </div>
-</div>
-
-
 {% endblock %}

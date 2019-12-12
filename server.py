@@ -8,12 +8,14 @@ app.secret_key = "thisisasecretkeyyoullneverguessit"
 
 @app.route("/")
 def home():
+    session.pop('userID', None)
     return render_template("index.html")
 
 
 @app.route("/ratings/<userID>")
 def ratings(userID):
 
+    userID = session['userID']
     user_ratings = get_user_ratings(int(userID))
 
     # if empty then return message saying none rated, otherwise return and display table
@@ -24,13 +26,16 @@ def ratings(userID):
     user_ratings = user_ratings[['Book ID', 'Title', 'Genre', 'Rating']]
 
     return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False\
-        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm", "display-table"]))
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
 @app.route("/recommendations/<userID>")
 def recommendations(userID):
 
+    userID = session['userID']
     user_ratings = get_user_ratings(int(userID))
+
+    # if empty then return message saying that at least one must be rated for recommendations, otherwise display table
     if user_ratings.empty:
         empty_message = "<h2>You must rate at least one book to receive a recommendation!</h2>"
         return render_template("recommendations.html", id=userID, recommendations=empty_message)
@@ -59,6 +64,7 @@ def validate():
 @app.route("/addNewUser", methods = ['POST'])
 def addNewUser():
 
+    session.pop('userID', None)
     users = pd.read_csv("dataset/users.csv")
     userID = request.form['userID']
 
@@ -70,7 +76,8 @@ def addNewUser():
     if exists:
         return "oops", 400
     
-    # if ID does not exist append to DF and csv
+    # if ID does not exist append to DF and csv and set in session
+    session['userID'] = int(userID)
     users = users.append({'userID': userID}, ignore_index=True)
     users_csv = users.to_csv(r'dataset/users.csv', index=False)
     return "works", 200
