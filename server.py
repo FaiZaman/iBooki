@@ -23,7 +23,7 @@ def ratings(userID):
         empty_message = "<h2>You haven't rated anything yet!</h2>"
         return render_template("ratings.html", id=userID, ratings=empty_message)
 
-    user_ratings = user_ratings[['Book ID', 'Title', 'Genre', 'Rating']]
+    user_ratings = user_ratings[['bookID', 'Title', 'Genre', 'Rating']]
 
     return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False\
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
@@ -53,8 +53,8 @@ def update(userID):
     return render_template("update.html", id=userID)
 
 
-@app.route("/validate", methods = ['POST'])
-def validate():
+@app.route("/validateUser", methods = ['POST'])
+def validateUser():
 
     # validates if user ID is actual user
     users = pd.read_csv("dataset/users.csv")
@@ -90,19 +90,69 @@ def addNewUser():
     return "works", 200
 
 
+@app.route("/updateRating", methods = ['POST'])
+def updateRating(bookID, new_rating):
+    
+    verified = validateBook(bookID)
+    if not verified:
+        return "oops", 400
+
+    userID = session['userID']
+    ratings = pd.read_csv("dataset/ratings.csv")
+
+    # update the rating or add if it doesn't exist
+    matches = ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)]
+    if matches.empty:
+        ratings = ratings.append({'userID': userID, 'bookID': bookID, 'Rating': new_rating}, ignore_index=True)
+
+    matches = [[userID, bookID, new_rating]]    
+    ratings_csv = ratings.to_csv(r'dataset/ratings.csv', index=False)
+    return "works", 200
+
+
+@app.route("/deleteRating", methods = ['POST'])
+def deleteRating(bookID):
+    
+    verified = validateBook(bookID)
+    if not verified:
+        return "oops", 400
+
+    userID = session['userID']
+    ratings = pd.read_csv("dataset/ratings.csv")
+
+    matches = ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)]
+    if matches.empty:
+        return "nope", 400
+
+    index = ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)].index[0]
+    ratings = ratings.drop([index])
+    ratings_csv = ratings.to_csv(r'dataset/ratings.csv', index=False)
+    return "works", 200
+
+
+def validateBook(bookID):
+
+    books = pd.read_csv("dataset/books.csv")
+
+    for index, row in books.iterrows():
+        if int(bookID) == int(row['bookID']):
+            return True
+    return False
+
+
 def get_user_ratings(userID):
 
     # read in ratings and take only the ones rated by current user
     ratings = pd.read_csv("dataset/ratings.csv")
     user_ratings = ratings.loc[ratings['userID'] == userID]
 
-    # remove user ID column and sory by book ID
+    # remove user ID column and sory by bookID
     user_ratings = user_ratings.drop(['userID'], axis=1)
-    user_ratings = user_ratings.sort_values(by=['Book ID'])
+    user_ratings = user_ratings.sort_values(by=['bookID'])
 
     # Add book title and genre
     books = pd.read_csv("dataset/books.csv")
-    user_ratings = (user_ratings.merge(books, how='left', left_on='Book ID', right_on='Book ID'))
+    user_ratings = (user_ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
 
     return user_ratings
 

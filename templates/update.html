@@ -20,7 +20,7 @@ iBooki | Add/Update/Delete Rating
 {% block logout %}
 <ul class="navbar-nav">
     <li class="nav-item">
-        <button type="button" id="logout" class="nav-link btn btn-info" href="/" style="color:white;"><b>Log Out</b></button>
+        <button type="button" id="logout" class="nav-link btn btn-info" href="/" style="color:white; padding: 10px;"><b>Log Out</b></button>
     </li>
 </ul>
 {% endblock %}
@@ -40,5 +40,33 @@ iBooki | Add/Update/Delete Rating
         </div>
     </div>
     <br>
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <input type="search" class="form-control mr-sm-2" placeholder="Search for a book by title...">
+                <button type="submit" class="btn btn-info my-2 my-sm-0">Search</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="row search-results">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <th scope="col">bookID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Genre</th>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            <button type="button" class="btn btn-success add-button">Add/Update</button>
+        </div>
+        <div class="col-md-1 offset-md-1">
+            <button type="button" class="btn btn-danger add-button">Delete</button>
+        </div>
+    </div>
 </div>
 {% endblock %}

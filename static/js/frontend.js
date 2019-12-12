@@ -12,7 +12,7 @@ $(document).ready(function(){
         const userID = $("#userID").val();
 
         $.ajax({
-            url: "/validate",
+            url: "/validateUser",
             data: {
                 userID: userID,
             },
