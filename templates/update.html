@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 
 {% block title %}
-iBooki | My Profile
+iBooki | Add/Update/Delete Rating
 {% endblock %}
 
 
 {% block nav %}
-<li class="nav-item active">
-    <a class="nav-link" href="#">My Ratings<span class="sr-only">(current)</span></a>
+<li class="nav-item">
+    <a class="nav-link" href="/ratings/{{ id }}">My Ratings</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="/recommendations/{{ id }}">Recommendations</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="/update/{{ id }}">Add/Update/Delete Rating</a>
+<li class="nav-item active">
+    <a class="nav-link" href="#">Add/Update/Delete Rating<span class="sr-only">(current)</span></a>
 </li>
 {% endblock %}
 
@@ -36,14 +36,9 @@ iBooki | My Profile
     <br>
     <div class="row">
         <div class="col-md-6 table-header">
-            <b>Your Rated Books</b>
+            <b>Add, Update or Delete a Rating</b>
         </div>
     </div>
     <br>
-    <div class="row">
-        <div class="col-md-9 offset-md-3">
-            {{ ratings | safe }}
-        </div>
-    </div>
 </div>
 {% endblock %}

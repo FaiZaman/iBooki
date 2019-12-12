@@ -46,6 +46,13 @@ def recommendations(userID):
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
+@app.route("/update/<userID>")
+def update(userID):
+
+    userID = session['userID']
+    return render_template("update.html", id=userID)
+
+
 @app.route("/validate", methods = ['POST'])
 def validate():
 
