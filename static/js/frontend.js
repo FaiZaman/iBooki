@@ -56,4 +56,9 @@ $(document).ready(function(){
         $(".card-body-signin").show(300);
     })
 
+    $("#logout").on('click', function(){
+        /* log out and send to home page */
+        window.location.href = "/"
+    })
+
 });
