@@ -14,11 +14,22 @@ def home():
 def ratings(userID):
 
     user_ratings = get_user_ratings(int(userID))
+
+    # if empty then return message saying none rated, otherwise return and display table
+    if user_ratings.empty:
+        empty_message = "<h2>You haven't rated anything yet!</h2>"
+        return render_template("ratings.html", id=userID, ratings=empty_message)
+
     return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False))
 
 
 @app.route("/recommendations/<userID>")
 def recommendations(userID):
+
+    user_ratings = get_user_ratings(int(userID))
+    if user_ratings.empty:
+        empty_message = "<h2>You must rate at least one book to receive a recommendation!</h2>"
+        return render_template("recommendations.html", id=userID, recommendations=empty_message)
 
     predictions, books, ratings = recommender.read_and_predict()
     user_data, user_recommendations = recommender.recommend_books(predictions, int(userID), books, ratings, num_recommendations=5)
@@ -66,11 +77,11 @@ def get_user_ratings(userID):
 
     # remove user ID column and sory by book ID
     user_ratings = user_ratings.drop(['userID'], axis=1)
-    user_ratings = user_ratings.sort_values(by=['bookID'])
+    user_ratings = user_ratings.sort_values(by=['Book ID'])
 
     # Add book title and genre
     books = pd.read_csv("dataset/books.csv")
-    user_ratings = (user_ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
+    user_ratings = (user_ratings.merge(books, how='left', left_on='Book ID', right_on='Book ID'))
 
     return user_ratings
 
