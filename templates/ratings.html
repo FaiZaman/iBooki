@@ -17,21 +17,23 @@ iBooki | My Profile
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-6 offset-md-4">
-        <h1 class="welcome">Welcome, User {{ id }}</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="welcome">Welcome, User {{ id }}</h1>
+        </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 offset-md-1 recommendations">
-        <b>Your Rated Books</b>
+    <br>
+    <div class="row">
+        <div class="col-md-6 ratings-table">
+            <b>Your Rated Books</b>
+        </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 offset-md-4">
-        {{ ratings | safe }}
+    <br>
+    <div class="row">
+        <div class="col-md-6 offset-md-3 display-table">
+            {{ ratings | safe }}
+        </div>
     </div>
 </div>
 {% endblock %}

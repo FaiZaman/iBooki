@@ -1,9 +1,10 @@
-from flask import Flask, url_for, render_template, request, redirect, make_response
+from flask import Flask, url_for, render_template, request, redirect, make_response, session
 import pandas as pd
 import recommender
 
 # create app and read in users
 app = Flask(__name__)
+app.secret_key = "thisisasecretkeyyoullneverguessit"
 
 @app.route("/")
 def home():
@@ -20,7 +21,10 @@ def ratings(userID):
         empty_message = "<h2>You haven't rated anything yet!</h2>"
         return render_template("ratings.html", id=userID, ratings=empty_message)
 
-    return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False))
+    user_ratings = user_ratings[['Book ID', 'Title', 'Genre', 'Rating']]
+
+    return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False\
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm", "display-table"]))
 
 
 @app.route("/recommendations/<userID>")
@@ -33,7 +37,8 @@ def recommendations(userID):
 
     predictions, books, ratings = recommender.read_and_predict()
     user_data, user_recommendations = recommender.recommend_books(predictions, int(userID), books, ratings, num_recommendations=5)
-    return render_template("recommendations.html", id=userID, recommendations=user_recommendations.to_html(index=False))
+    return render_template("recommendations.html", id=userID, recommendations=user_recommendations.to_html(index=False\
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
 @app.route("/validate", methods = ['POST'])
@@ -45,7 +50,9 @@ def validate():
     
     for index, row in users.iterrows():
         if int(userID) == int(row['userID']):
+            session['userID'] = int(userID)
             return "works", 200
+    session.pop('userID', None)
     return "oops", 400
 
 
