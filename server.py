@@ -50,18 +50,21 @@ def recommendations(userID):
 def search():
 
     search_query = request.form['search_query']
+    search_query = search_query.lower()
+    userID = session['userID']
 
+    # merge and group the dataframes, then search for keyword
     books = pd.read_csv("dataset/books.csv")
     ratings = pd.read_csv("dataset/ratings.csv")
     merged_data = (ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
-    lower1 = merged_data['Title'].str.title()
-    lower1 = lower1.to_frame()
-    merged_data['Title'] = lower1
+    merged_data['Title'].str.lower()
     
     search_results = merged_data[merged_data['Title'].str.contains(search_query, na=False)]
-    print(search_results)
-    search_results = search_results.groupby(['bookID', 'Title', 'Genre'])
-    return search_results, 200
+    search_results.groupby(['bookID', 'Title', 'Genre'])
+    search_results = search_results.drop_duplicates(['bookID'])
+
+    return render_template("update.html", id=userID, search_results=search_results.to_html(index=False\
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
 @app.route("/update/<userID>")

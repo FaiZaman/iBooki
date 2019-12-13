@@ -58,10 +58,10 @@ $(document).ready(function(){
             },
             type: 'POST',
             success: function(){
-                window.location.href = "#"
+                location.reload()
             },
             error: function(){
-                alert("This book does not exist.")
+                alert("An error occured.")
             }
         })
     });
