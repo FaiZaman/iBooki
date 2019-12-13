@@ -75,6 +75,16 @@ def search():
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
+@app.route("/getBooks", methods = ['GET'])
+def getBooks():
+
+    userID = session['userID']
+    books = pd.read_csv("dataset/books.csv")
+    
+    return render_template("update.html", id=userID, search_results=books.to_html(index=False\
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
+
+
 @app.route("/update/<userID>")
 def update(userID):
 

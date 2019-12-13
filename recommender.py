@@ -41,6 +41,7 @@ def recommend_books(predictions, userID, books, ratings, num_recommendations=5):
         (pd.DataFrame(user_predictions).reset_index(), how='left', left_on='bookID', right_on="bookID").rename\
         (columns = {user_index_ID: 'Predictions'}).sort_values('Predictions', ascending=False).iloc[:num_recommendations, :-1])
 
+    recommendations = recommendations.sort_values(by=['bookID'])
     return user_data, recommendations
 
 #predictions, books, ratings = read_and_predict()
