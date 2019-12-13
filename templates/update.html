@@ -42,8 +42,8 @@ iBooki | Add/Update/Delete Rating
     <br>
     <div class="row">
         <div class="col-md-12">
-            <form class="form-inline">
-                <input type="search" class="form-control mr-sm-2" placeholder="Search for a book by title...">
+            <form class="form-inline" id="form-search">
+                <input type="search" id="search-box" class="form-control mr-sm-2" placeholder="Search for a book by title...">
                 <button type="submit" class="btn btn-info my-2 my-sm-0">Search</button>
             </form>
         </div>
@@ -51,13 +51,7 @@ iBooki | Add/Update/Delete Rating
     <br>
     <div class="row search-results">
         <div class="col-md-12">
-            <table class="table">
-                <thead>
-                    <th scope="col">bookID</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Genre</th>
-                </thead>
-            </table>
+            {{ search_results }}
         </div>
     </div>
     <div class="row">

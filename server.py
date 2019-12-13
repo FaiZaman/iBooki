@@ -46,11 +46,33 @@ def recommendations(userID):
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
+@app.route("/search", methods = ['POST'])
+def search():
+
+    search_query = request.form['search_query']
+
+    books = pd.read_csv("dataset/books.csv")
+    ratings = pd.read_csv("dataset/ratings.csv")
+    merged_data = (ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
+    lower1 = merged_data['Title'].str.title()
+    lower1 = lower1.to_frame()
+    merged_data['Title'] = lower1
+    
+    search_results = merged_data[merged_data['Title'].str.contains(search_query, na=False)]
+    print(search_results)
+    search_results = search_results.groupby(['bookID', 'Title', 'Genre'])
+    return search_results, 200
+
+
 @app.route("/update/<userID>")
 def update(userID):
 
+    search_results = ""
     userID = session['userID']
-    return render_template("update.html", id=userID)
+
+    # search functionality goes here
+
+    return render_template("update.html", id=userID, search_results=search_results)
 
 
 @app.route("/validateUser", methods = ['POST'])
@@ -88,6 +110,13 @@ def addNewUser():
     users = users.append({'userID': userID}, ignore_index=True)
     users_csv = users.to_csv(r'dataset/users.csv', index=False)
     return "works", 200
+
+
+@app.route("/getUserID", methods = ['GET'])
+def getUserID():
+
+    userID = session['userID']
+    return userID, 200
 
 
 @app.route("/updateRating", methods = ['POST'])
