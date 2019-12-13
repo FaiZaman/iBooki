@@ -54,6 +54,7 @@ iBooki | Add/Update/Delete Rating
             {{ search_results | safe }}
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="col-md-1">
             <button type="button" class="btn btn-success add-button" id="add-button">Add/Update</button>
@@ -68,11 +69,13 @@ iBooki | Add/Update/Delete Rating
             <form class="form-inline" id="form-update" method="POST" action="/updateRating">
                 <input type="number" class="input" name="book-id" placeholder="Enter the book ID">
                 <input type="number" class="input" name="new-rating" placeholder="Enter the new rating">
+                <button type="submit" class="btn btn-success" id="add-submit">Submit</button>
             </form>
         </div>
         <div class="col-md-1 offset-md-3" id="delete-input">
             <form class="form-inline" id="form-delete" method="POST" action="/deleteRating">
                 <input type="number" class="input" name="book-id" placeholder="Enter the book ID">
+                <button type="submit" class="btn btn-danger" id="delete-submit">Submit</button>
             </form>
         </div>
     </div>

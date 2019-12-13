@@ -126,8 +126,8 @@ def getUserID():
 @app.route("/updateRating", methods = ['POST'])
 def updateRating():
 
-    bookID = request.form['book-id']
-    new_rating = request.form['new-rating']
+    bookID = int(request.form['book-id'])
+    new_rating = int(request.form['new-rating'])
     
     verified = validateBook(bookID)
     if not verified:
@@ -141,9 +141,12 @@ def updateRating():
     if matches.empty:
         ratings = ratings.append({'userID': userID, 'bookID': bookID, 'Rating': new_rating}, ignore_index=True)
 
-    matches = [[userID, bookID, new_rating]]    
+    ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)] = [[userID, bookID, new_rating]]
     ratings_csv = ratings.to_csv(r'dataset/ratings.csv', index=False)
-    return "works", 200
+    user_ratings = get_user_ratings(userID)
+
+    return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False\
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
 @app.route("/deleteRating", methods = ['POST'])
