@@ -33,6 +33,7 @@ $(document).ready(function(){
         /* get ID and add to users database */
         const userID = $("#new-user-id").val();
         e.preventDefault();
+
         $.ajax({
             url: "/addNewUser",
             data: {
@@ -51,7 +52,7 @@ $(document).ready(function(){
     $("#form-delete").on('submit', function(e){
 
         const bookID = $().val();
-        const userID = getUserID();
+        const userID = url.split("/").pop();
         e.preventDefault();
 
         $.ajax({
@@ -61,7 +62,7 @@ $(document).ready(function(){
             },
             type: 'POST',
             success: function(){
-                window.location.href = "/ratings/" + userID /* TODO: get user ID in get request */
+                window.location.href = "/ratings/" + userID
             },
             error: function(){
                 alert("This book does not exist or you have not rated it.")
@@ -72,17 +73,17 @@ $(document).ready(function(){
     $(".sign-up").on('click', function(){
         $(".card-body-signin").hide(300);
         $(".card-body-signup").show(300);
-    })
+    });
 
     $(".sign-in").on('click', function(){
         $(".card-body-signup").hide(300);
         $(".card-body-signin").show(300);
-    })
+    });
 
     $("#logout").on('click', function(){
         /* log out and send to home page */
         window.location.href = "/"
-    })
+    });
 
     $("#add-button").on('click', function(){
         $("#update-input").show();

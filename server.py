@@ -50,21 +50,28 @@ def recommendations(userID):
 def search():
 
     search_query = request.form['search_query']
-    search_query = search_query.lower()
+    search_query = search_query.title()
     userID = session['userID']
 
     # merge and group the dataframes, then search for keyword
     books = pd.read_csv("dataset/books.csv")
     ratings = pd.read_csv("dataset/ratings.csv")
     merged_data = (ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
-    merged_data['Title'].str.lower()
+    capitilised = merged_data['Title'].str.title()
+    capitilised = capitilised.to_frame()
+    merged_data['Title'] = capitilised
 
-    # TODO fix search functionality
-    
+    # if no results return empty message otherwise return results
     search_results = merged_data[merged_data['Title'].str.contains(search_query, na=False)]
+    if search_results.empty:
+        empty_message = "<h2>No books found!</h2>"
+        return render_template("update.html", id=userID, search_results=empty_message)
+
     search_results.groupby(['bookID', 'Title', 'Genre'])
     search_results = search_results.drop_duplicates(['bookID'])
-    return render_template("update.html", id=userID, search_results=search_results.to_html(index=False\
+    modified_search_results = search_results.drop(columns=['userID', 'Rating']).sort_values(by=['bookID'])
+        
+    return render_template("update.html", id=userID, search_results=modified_search_results.to_html(index=False\
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
 
@@ -150,10 +157,12 @@ def updateRating():
 
 
 @app.route("/deleteRating", methods = ['POST'])
-def deleteRating(bookID):
+def deleteRating():
     
+    bookID = int(request.form['book-id'])
     verified = validateBook(bookID)
     if not verified:
+        print("not verified")
         return "oops", 400
 
     userID = session['userID']
@@ -161,12 +170,17 @@ def deleteRating(bookID):
 
     matches = ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)]
     if matches.empty:
+        print("is empty")
         return "nope", 400
 
     index = ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)].index[0]
     ratings = ratings.drop([index])
     ratings_csv = ratings.to_csv(r'dataset/ratings.csv', index=False)
-    return "works", 200
+    user_ratings = get_user_ratings(userID)
+
+    return render_template("ratings.html", id=userID, ratings=user_ratings.to_html(index=False\
+        ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
+
 
 
 def validateBook(bookID):
