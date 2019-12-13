@@ -3,6 +3,8 @@
 $(document).ready(function(){
 
     $(".card-body-signup").hide();
+    $("#update-input").hide();
+    $("#delete-input").hide();
     
     $(".form-signin").on('submit', function(event){
 
@@ -46,26 +48,6 @@ $(document).ready(function(){
         })
     });
 
-    $("#form-search").on('submit', function(e){
-
-        const title = $("#search-box").val();
-        e.preventDefault();
-
-        $.ajax({
-            url: "/search",
-            data: {
-                search_query: title,
-            },
-            type: 'POST',
-            success: function(){
-                location.reload()
-            },
-            error: function(){
-                alert("An error occured.")
-            }
-        })
-    });
-
     $("#form-delete").on('submit', function(e){
 
         const bookID = $().val();
@@ -100,6 +82,14 @@ $(document).ready(function(){
     $("#logout").on('click', function(){
         /* log out and send to home page */
         window.location.href = "/"
+    })
+
+    $("#add-button").on('click', function(){
+        $("#update-input").show();
+    });
+
+    $("#delete-button").on('click', function(){
+        $("#delete-input").show();
     })
 
     function getUserID(){

@@ -58,11 +58,12 @@ def search():
     ratings = pd.read_csv("dataset/ratings.csv")
     merged_data = (ratings.merge(books, how='left', left_on='bookID', right_on='bookID'))
     merged_data['Title'].str.lower()
+
+    # TODO fix search functionality
     
     search_results = merged_data[merged_data['Title'].str.contains(search_query, na=False)]
     search_results.groupby(['bookID', 'Title', 'Genre'])
     search_results = search_results.drop_duplicates(['bookID'])
-
     return render_template("update.html", id=userID, search_results=search_results.to_html(index=False\
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
@@ -123,7 +124,10 @@ def getUserID():
 
 
 @app.route("/updateRating", methods = ['POST'])
-def updateRating(bookID, new_rating):
+def updateRating():
+
+    bookID = request.form['book-id']
+    new_rating = request.form['new-rating']
     
     verified = validateBook(bookID)
     if not verified:
@@ -190,4 +194,4 @@ def get_user_ratings(userID):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
