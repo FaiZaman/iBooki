@@ -3,6 +3,17 @@
 $(document).ready(function(){
 
     $(".card-body-signup").hide();
+    $("#update-input").hide();
+    $("#delete-input").hide();
+
+    $("#add-button").on('click', function(){
+        $("#update-input").toggle(500);
+    });
+
+    $("#delete-button").on('click', function(){
+        $("#delete-input").toggle(500);
+    });
+    
     
     $(".form-signin").on('submit', function(event){
 
@@ -12,7 +23,7 @@ $(document).ready(function(){
         const userID = $("#userID").val();
 
         $.ajax({
-            url: "/validate",
+            url: "/validateUser",
             data: {
                 userID: userID,
             },
@@ -31,6 +42,7 @@ $(document).ready(function(){
         /* get ID and add to users database */
         const userID = $("#new-user-id").val();
         e.preventDefault();
+
         $.ajax({
             url: "/addNewUser",
             data: {
@@ -46,19 +58,66 @@ $(document).ready(function(){
         })
     });
 
+    $("#form-delete").on('submit', function(e){
+
+        const bookID = $().val();
+        const userID = url.split("/").pop();
+        e.preventDefault();
+
+        $.ajax({
+            url: "/deleteRating",
+            data: {
+                bookID: bookID,
+            },
+            type: 'POST',
+            success: function(){
+                window.location.href = "/ratings/" + userID
+            },
+            error: function(){
+                alert("This book does not exist or you have not rated it.")
+            }
+        })
+    });
+
     $(".sign-up").on('click', function(){
         $(".card-body-signin").hide(300);
         $(".card-body-signup").show(300);
-    })
+    });
 
     $(".sign-in").on('click', function(){
         $(".card-body-signup").hide(300);
         $(".card-body-signin").show(300);
-    })
+    });
 
     $("#logout").on('click', function(){
         /* log out and send to home page */
         window.location.href = "/"
+    });
+
+    $("#add-button").on('click', function(){
+        $("#update-input").show();
+    });
+
+    $("#delete-button").on('click', function(){
+        $("#delete-input").show();
     })
+
+    function getUserID(){
+
+        userID = 0
+
+        $.ajax({
+            url: "/",
+            type: 'GET',
+            success: function(response){
+                userID = response.data.userID
+            },
+            error: function(){
+                alert("dang")
+            }
+        })
+
+        return userID
+    }
 
 });

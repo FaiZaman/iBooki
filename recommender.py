@@ -9,8 +9,8 @@ def read_and_predict():
     ratings = pd.read_csv("dataset/ratings.csv")
 
     # convert to numeric and combine ratings per user
-    books['Book ID'] = books['Book ID'].apply(pd.to_numeric)
-    ratings_combined = ratings.pivot(index = "userID", columns="Book ID", values="Rating").fillna(0)
+    books['bookID'] = books['bookID'].apply(pd.to_numeric)
+    ratings_combined = ratings.pivot(index = "userID", columns="bookID", values="Rating").fillna(0)
 
     # demean the ratings
     ratings_demeaned = ratings_combined.as_matrix()
@@ -34,13 +34,14 @@ def recommend_books(predictions, userID, books, ratings, num_recommendations=5):
 
     # get the user data and merge with book data
     user_data = ratings[ratings['userID'] == (userID)]
-    user_rated = (user_data.merge(books, how = 'left', left_on = 'Book ID', right_on = "Book ID").sort_values(['Rating'], ascending=False))
+    user_rated = (user_data.merge(books, how = 'left', left_on = 'bookID', right_on = "bookID").sort_values(['Rating'], ascending=False))
 
     # recommend the highest rated books that the user has not seen yet
-    recommendations = (books[~books['Book ID'].isin(user_rated['Book ID'])].merge\
-        (pd.DataFrame(user_predictions).reset_index(), how='left', left_on='Book ID', right_on="Book ID").rename\
+    recommendations = (books[~books['bookID'].isin(user_rated['bookID'])].merge\
+        (pd.DataFrame(user_predictions).reset_index(), how='left', left_on='bookID', right_on="bookID").rename\
         (columns = {user_index_ID: 'Predictions'}).sort_values('Predictions', ascending=False).iloc[:num_recommendations, :-1])
 
+    recommendations = recommendations.sort_values(by=['bookID'])
     return user_data, recommendations
 
 #predictions, books, ratings = read_and_predict()
