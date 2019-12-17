@@ -80,7 +80,7 @@ def getBooks():
 
     userID = session['userID']
     books = pd.read_csv("dataset/books.csv")
-    
+
     return render_template("update.html", id=userID, search_results=books.to_html(index=False\
         ,classes=["table-bordered", "table-dark", "table-striped", "table-hover", "table-sm"]))
 
@@ -145,12 +145,13 @@ def updateRating():
 
     bookID = int(request.form['book-id'])
     new_rating = int(request.form['new-rating'])
+    userID = session['userID']
     
     verified = validateBook(bookID)
-    if not verified:
-        return "oops", 400
+    if not verified or new_rating > 5:
+        error_message = "<h2>Invalid book ID or rating. Please try again.</h2>"
+        return render_template("update.html", id=userID, search_results=error_message)
 
-    userID = session['userID']
     ratings = pd.read_csv("dataset/ratings.csv")
 
     # update the rating or add if it doesn't exist
@@ -171,11 +172,12 @@ def deleteRating():
     
     bookID = int(request.form['book-id'])
     verified = validateBook(bookID)
-    if not verified:
-        print("not verified")
-        return "oops", 400
-
     userID = session['userID']
+
+    if not verified:
+        error_message = "<h2>Invalid book ID. Please try again.</h2>"
+        return render_template("update.html", id=userID, search_results=error_message)
+
     ratings = pd.read_csv("dataset/ratings.csv")
 
     matches = ratings.loc[(ratings.userID == userID) & (ratings['bookID'] == bookID)]

@@ -5,6 +5,15 @@ $(document).ready(function(){
     $(".card-body-signup").hide();
     $("#update-input").hide();
     $("#delete-input").hide();
+
+    $("#add-button").on('click', function(){
+        $("#update-input").toggle(500);
+    });
+
+    $("#delete-button").on('click', function(){
+        $("#delete-input").toggle(500);
+    });
+    
     
     $(".form-signin").on('submit', function(event){
 

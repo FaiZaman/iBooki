@@ -41,6 +41,33 @@ iBooki | Add/Update/Delete Rating
     </div>
     <br>
     <div class="row">
+        <div class="col-md-1">
+            <button type="button" class="btn btn-success add-button" id="add-button">Add/Update</button>
+        </div>
+        <div class="col-md-1 offset-md-3">
+            <button type="button" class="btn btn-danger add-button" id="delete-button">Delete</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-1 form-popup" id="update-input">
+            <form class="form-inline form-container form-horizontal" id="form-update" method="POST" action="/updateRating">
+                <input type="text" class="form-control form-data" name="book-id" placeholder="Enter the book ID">
+                <br>
+                <input type="text" class="form-control form-data" name="new-rating" placeholder="Enter the new rating">
+                <br>
+                <button type="submit" class="btn btn-success" id="add-submit">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-1 offset-md-3 form-popup" id="delete-input">
+            <form class="form-inline form-container form-horizontal" id="form-delete" method="POST" action="/deleteRating">
+                <input type="text" class="form-control form-data" name="book-id" placeholder="Enter the book ID">
+                <br>
+                <button type="submit" class="btn btn-danger" id="delete-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <form class="form-inline" id="form-search" method="POST" action="/search">
                 <input type="search" id="search-box" name="search_query" class="form-control mr-sm-2" placeholder="Search for a book by title...">
@@ -60,29 +87,5 @@ iBooki | Add/Update/Delete Rating
         </div>
     </div>
     <br>
-    <div class="row">
-        <div class="col-md-1">
-            <button type="button" class="btn btn-success add-button" id="add-button">Add/Update</button>
-        </div>
-        <div class="col-md-1 offset-md-3">
-            <button type="button" class="btn btn-danger add-button" id="delete-button">Delete</button>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-md-1" id="update-input">
-            <form class="form-inline" id="form-update" method="POST" action="/updateRating">
-                <input type="number" class="input" name="book-id" placeholder="Enter the book ID">
-                <input type="number" class="input" name="new-rating" placeholder="Enter the new rating">
-                <button type="submit" class="btn btn-success" id="add-submit">Submit</button>
-            </form>
-        </div>
-        <div class="col-md-1 offset-md-3" id="delete-input">
-            <form class="form-inline" id="form-delete" method="POST" action="/deleteRating">
-                <input type="number" class="input" name="book-id" placeholder="Enter the book ID">
-                <button type="submit" class="btn btn-danger" id="delete-submit">Submit</button>
-            </form>
-        </div>
-    </div>
 </div>
 {% endblock %}
